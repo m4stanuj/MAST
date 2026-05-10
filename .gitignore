@@ -1,0 +1,45 @@
+# ─── Secrets (NEVER commit) ───────────────────────────────────
+config/.env
+.env
+*.env
+authorized_targets.txt
+
+# ─── Python ───────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# ─── Runtime data (generated, not source) ─────────────────────
+data/
+*.json
+!config/opencode.json
+!config/m4st_agents_config.json
+!skills/telegram/telegram-chats.example.json
+
+# ─── Virtual envs ─────────────────────────────────────────────
+venv/
+.venv/
+env/
+.env/
+
+# ─── OS junk ──────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── Editors ──────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ─── Logs ─────────────────────────────────────────────────────
+*.log
+logs/

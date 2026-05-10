@@ -1,0 +1,181 @@
+{
+  "_version": "v4.0 — May 2026",
+  "_philosophy": "Working > Perfect. Only what exists gets configured. NIM replaces local as primary.",
+  "_active_mcps": ["shell_mcp", "file_mcp", "memory_mcp", "research_mcp", "notify_mcp", "coding_mcp"],
+  "_deferred": ["analytics_mcp", "ambient_mcp", "react_mcp", "scheduler_mcp", "pentest_memory_mcp", "recon_mcp", "vuln_mcp"],
+  "_deferred_note": "Deferred MCPs = build when actually needed, not before. Config ≠ existence.",
+
+  "agents": {
+    "developer_agent": {
+      "model": "anthropic/claude-sonnet-4-6",
+      "fallback": ["groq/llama-4-scout", "nvidia/deepseek-v4-flash", "deepseek/deepseek-chat"],
+      "system_prompt": "Developer Agent — M4ST system. Route all execution through OpenWork v12 (coding_mcp). Write code, debug, terminal. Hinglish with Mast. jugaad-first, free-first.",
+      "tools": ["shell_mcp", "file_mcp", "coding_mcp", "memory_mcp"],
+      "timeout_min": 5,
+      "checkpoint": "every_step"
+    },
+
+    "browser_agent": {
+      "model": "google/gemini-2.5-pro",
+      "fallback": ["google/gemini-2.5-flash", "anthropic/claude-sonnet-4-6"],
+      "system_prompt": "Browser Agent — M4ST system. Web navigation, clicks, forms, research. CloakBrowser backend (anti-detection). safety_guard active.",
+      "tools": ["browser_mcp", "research_mcp", "memory_mcp"],
+      "browser_backend": "cloakbrowser",
+      "timeout_min": 10,
+      "checkpoint": "every_step"
+    },
+
+    "document_agent": {
+      "model": "deepseek/deepseek-chat",
+      "fallback": ["groq/llama-4-scout", "mistral/mistral-large-latest"],
+      "system_prompt": "Document Agent — M4ST system. PDFs, DOCX, XLSX, reports, summaries. DeepSeek-chat cheapest. Bulk writing = mistral-large (1B tok/mo free).",
+      "tools": ["file_mcp", "memory_mcp", "research_mcp"],
+      "timeout_min": 5,
+      "checkpoint": "on_file_write"
+    },
+
+    "multimodal_agent": {
+      "model": "google/gemini-2.5-flash",
+      "fallback": ["nvidia/nemotron-3-nano-omni", "anthropic/claude-sonnet-4-6"],
+      "system_prompt": "MultiModal Agent — M4ST system. Images, screenshots, vision tasks. VRAM guard: if RTX < 1.5GB free, use cloud (default). Local vision = offline/privacy only.",
+      "tools": ["file_mcp", "memory_mcp"],
+      "vram_guard_gb": 1.5,
+      "local_vision": "qwen3.5:9b-instruct-q4_K_M",
+      "local_rule": "offline or privacy task ONLY",
+      "timeout_min": 5,
+      "checkpoint": "on_output"
+    },
+
+    "pentest_agent": {
+      "model": "nvidia/deepseek-r1",
+      "fallback": ["groq/llama-4-scout", "deepseek/deepseek-chat", "ollama/qwen3.5:9b"],
+      "system_prompt": "Pentest Agent — M4ST system. CEH labs ONLY. authorized_targets.txt check happens in CODE before any scan — not just config. Every action logged. Authorized targets only. Generate reports via Document Agent.",
+      "tools": ["shell_mcp", "file_mcp", "notify_mcp"],
+      "_note": "recon_mcp + vuln_mcp + pentest_memory_mcp = deferred. Build when CEH lab workflow actually needed.",
+      "logging": true,
+      "authorized_only": true,
+      "safety_guard": "P0_always",
+      "timeout_min": 20,
+      "checkpoint": "every_action"
+    },
+
+    "orchestrator": {
+      "model": "anthropic/claude-sonnet-4-6",
+      "fallback": ["groq/llama-4-scout", "nvidia/glm-5.1"],
+      "system_prompt": "OMO Sisyphus — Orchestrator, Manager, Operator for M4ST. Goal → DAG → parallel agents (asyncio.gather). Failure chain: retry → replace → skip → partial + notify. Plan→Critique→Refine on final. SQLite checkpoint every step. Max 5 sub-agents. 5min timeout.",
+      "tools": ["memory_mcp", "notify_mcp"],
+      "max_sub_agents": 5,
+      "timeout_min": 30,
+      "checkpoint": "every_step"
+    }
+  },
+
+  "providers": {
+    "groq": {
+      "prefix": "gsk_", "tps": 315, "daily": "1000 req/day",
+      "models": ["llama-4-scout", "llama-4-maverick"],
+      "best_for": "speed, reason primary"
+    },
+    "cerebras": {
+      "prefix": "csk-", "tps": 1000, "daily": "1M tokens",
+      "models": ["qwen3-32b"],
+      "best_for": "burst tasks, fastest responses"
+    },
+    "nvidia_nim": {
+      "prefix": "nvapi-", "rpm": 40, "billing": "none — unlimited dev use",
+      "base_url": "https://integrate.api.nvidia.com/v1",
+      "models": {
+        "deepseek-v4-flash": "284B MoE, 1M ctx — code + agents (BEST FREE CODE MODEL)",
+        "deepseek-v4":       "1M ctx, efficient MoE — reasoning",
+        "deepseek-r1":       "pentest chain, deep reasoning",
+        "glm-5.1":           "agentic workflows, long-horizon reasoning",
+        "glm-4.7":           "multilingual, tool use, UI",
+        "minimax-m2.7":      "230B, coding + reasoning",
+        "nemotron-3-nano-omni": "vision + speech + text — multimodal",
+        "sarvam-m":          "Indic languages — Hinglish tasks (experiment)"
+      },
+      "best_for": "quality tasks, code, reasoning — replaces local as primary"
+    },
+    "mistral": {
+      "prefix": "msk-", "monthly": "1B tokens free",
+      "models": ["mistral-large-latest"],
+      "best_for": "bulk writing, documents"
+    },
+    "gemini": {
+      "prefix": "AI", "daily": "1500 req",
+      "models": ["gemini-2.5-flash", "gemini-2.5-pro"],
+      "best_for": "vision, research, browser agent"
+    },
+    "deepseek": {
+      "prefix": "dsk-", "cost": "$0.28/1M out",
+      "models": ["deepseek-chat"],
+      "best_for": "cheapest paid fallback, document agent primary"
+    },
+    "anthropic": {
+      "prefix": "sk-ant-",
+      "models": ["claude-sonnet-4-6"],
+      "best_for": "orchestrator + dev agent — quality non-negotiable",
+      "rule": "last resort on cost. First choice on quality tasks."
+    }
+  },
+
+  "chain_priorities": {
+    "speed":   ["cerebras/qwen3-32b", "groq/llama-4-scout"],
+    "quality": ["nvidia/glm-5.1", "nvidia/deepseek-v4-flash", "groq/llama-4-scout"],
+    "code":    ["nvidia/deepseek-v4-flash", "groq/llama-4-scout", "deepseek/deepseek-chat"],
+    "vision":  ["opencv", "tesseract", "nvidia/nemotron-3-nano-omni", "gemini-2.5-flash"],
+    "write":   ["mistral/mistral-large-latest", "groq/llama-4-scout", "cerebras/qwen3-32b"],
+    "pentest": ["nvidia/deepseek-r1", "groq/llama-4-scout", "ollama/qwen3.5:9b"],
+    "default": ["groq/llama-4-scout", "cerebras/qwen3-32b", "nvidia/deepseek-v4-flash"],
+    "local":   ["ollama/qwen3.5:9b-instruct-q4_K_M"],
+    "local_rule": "ONLY when: (1) no internet OR (2) confirmed sensitive/private data. Not for cost saving — cloud is free."
+  },
+
+  "memory": {
+    "t1_ram_tokens": 500,
+    "t2_sqlite_days": 7,
+    "t3_chromadb": true,
+    "t4_graphiti": false,
+    "_t4_note": "Graphiti/FalkorDB = V2. ChromaDB handles V1 fine. Don't over-engineer.",
+    "hermes_auto": true,
+    "hermes_confidence_threshold": 0.7,
+    "semantic_cache": true,
+    "cache_threshold": 0.92,
+    "cache_max_entries": 300,
+    "cache_ttl_seconds": 3600
+  },
+
+  "local_llm": {
+    "model": "qwen3.5:9b-instruct-q4_K_M",
+    "rule": "PRIVACY/OFFLINE ONLY — not primary, not cost optimization",
+    "vram_usage": "6.96GB",
+    "vision": true,
+    "ollama_flags": {
+      "OLLAMA_FLASH_ATTENTION": "1",
+      "OLLAMA_KV_CACHE_TYPE": "q8_0",
+      "OLLAMA_NUM_GPU": "999"
+    }
+  },
+
+  "security": {
+    "localhost_only": true,
+    "auth": "Bearer UUID4 (V1) → JWT 24h (V2)",
+    "rate_limit_per_min": 10,
+    "safety_guard": "P0_always",
+    "blocked_commands": ["rm -rf", "git reset --hard", "DROP TABLE", "format c:", "sudo rm", "del /f /s"],
+    "pentest_guard": "authorized_targets.txt — CODE check, not config comment",
+    "telegram_allowed_ids": "env:M4ST_ALLOWED_CHAT_IDS"
+  },
+
+  "v1_ship_checklist": {
+    "1_docker": "docker ps → eigent_api + eigent_postgres both Up",
+    "2_ui": "localhost:5173 loads",
+    "3_soul": "SOUL v4.0 imported in Eigent Skills tab",
+    "4_mcps": "6 MCPs visible in Eigent Settings → MCP",
+    "5_demo": "/recon <lab_target> → OSINT report generated",
+    "6_authorized_guard": "recon_mcp.py has authorized_targets.txt check in actual code",
+    "7_github": "github.com/m4stanuj repo live with README",
+    "8_freelancer": "freelancer.in profile + demo video uploaded",
+    "_note": "This is V1 done. Everything else is V2+. Resist adding more."
+  }
+}

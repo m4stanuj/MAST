@@ -1,0 +1,419 @@
+{
+  // ================================================================
+  //  MAST v1.0 — opencode.json (May 2026)
+  //  Merged: M4STCLAW v3 + OpenWork v12 + EIGENT v4.1
+  //  19 MCP servers | 10+ providers | NVIDIA NIM + Mistral + Grok
+  //
+  //  Drop at: C:\Users\<you>\.config\opencode\opencode.json
+  //  Or run:  install.ps1  (auto-installs with correct paths)
+  //
+  //  Keys: Add in config/.env — NEVER hardcode here
+  //  Docs: github.com/m4stanuj
+  // ================================================================
+
+  // ── Plugins ────────────────────────────────────────────────────
+  "plugin": [
+    "oh-my-opencode",
+    "superpowers@git+https://github.com/obra/superpowers.git",
+    "opencode-agent-memory",
+    "opencode-cc-safety-net",
+    "opencode-env-sitter",
+    "opencode-handoff",
+    "opencode-token-pruner",
+    "opencode-token-analyzer"
+  ],
+
+  // ── Default model (OpenCode Zen = free, no key) ────────────────
+  "model": "opencode/kimi-k2",
+
+  // ── Providers ──────────────────────────────────────────────────
+  "providers": {
+
+    // GROQ — fastest inference, free tier (gsk_ prefix)
+    // Signup: console.groq.com
+    "groq": {
+      "apiKey": "${GROQ_API_KEY_1}"
+    },
+
+    // CEREBRAS — sub-100ms, 1000 TPS, free (csk- prefix)
+    // Signup: cloud.cerebras.ai
+    "cerebras": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Cerebras",
+      "options": {
+        "baseURL": "https://api.cerebras.ai/v1",
+        "apiKey": "${CEREBRAS_API_KEY_1}"
+      },
+      "models": {
+        "llama-3.3-70b":  { "name": "Llama 3.3 70B (Cerebras — 1000 TPS)" },
+        "qwen3-32b":      { "name": "Qwen3 32B (Cerebras)" }
+      }
+    },
+
+    // SAMBANOVA — large models, free tier (UUID format)
+    // Signup: cloud.sambanova.ai
+    "sambanova": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "SambaNova",
+      "options": {
+        "baseURL": "https://api.sambanova.ai/v1",
+        "apiKey": "${SAMBANOVA_API_KEY_1}"
+      },
+      "models": {
+        "Meta-Llama-3.1-405B-Instruct": { "name": "Llama 405B (SambaNova)" },
+        "Qwen2.5-72B-Instruct":         { "name": "Qwen2.5 72B (SambaNova)" }
+      }
+    },
+
+    // OPENROUTER — Kimi K2, MiMo-V2, DeepSeek FREE (sk-or- prefix)
+    // Signup: openrouter.ai
+    "openrouter": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "OpenRouter",
+      "options": {
+        "baseURL": "https://openrouter.ai/api/v1",
+        "apiKey": "${OPENROUTER_API_KEY_1}",
+        "defaultHeaders": {
+          "HTTP-Referer": "https://github.com/m4stanuj/MAST",
+          "X-Title": "MAST"
+        }
+      },
+      "models": {
+        "moonshotai/kimi-k2:free":                         { "name": "Kimi K2 FREE (Best Reasoning 2026)" },
+        "alibaba/mimo-72b-pro:free":                       { "name": "MiMo-V2-Pro FREE (#1 SWE-bench)" },
+        "alibaba/mimo-72b-omni:free":                      { "name": "MiMo-V2-Omni FREE (Multimodal)" },
+        "deepseek/deepseek-r1:free":                       { "name": "DeepSeek R1 FREE (Reasoning)" },
+        "nvidia/llama-3.3-nemotron-super-49b-v1:free":     { "name": "Nemotron-49B FREE (NVIDIA via OR)" },
+        "qwen/qwen3-235b-a22b:free":                       { "name": "Qwen3-235B FREE" },
+        "qwen/qwen3-coder-480b-a35b-instruct:free":        { "name": "Qwen3-Coder FREE (480B)" },
+        "minimax/minimax-m1:free":                         { "name": "MiniMax M1 FREE" },
+        "meta-llama/llama-4-maverick:free":                { "name": "Llama 4 Maverick FREE" },
+        "openai/gpt-oss-120b:free":                        { "name": "GPT-OSS 120B FREE" },
+        "deepseek/deepseek-chat-v3-0324:free":             { "name": "DeepSeek Chat V3 FREE" },
+        "google/gemini-2.5-pro-preview":                   { "name": "Gemini 2.5 Pro Preview" }
+      }
+    },
+
+    // DEEPSEEK — strong reasoning, cheap paid (sk- prefix)
+    // Signup: platform.deepseek.com
+    "deepseek": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "DeepSeek",
+      "options": {
+        "baseURL": "https://api.deepseek.com",
+        "apiKey": "${DEEPSEEK_API_KEY_1}"
+      },
+      "models": {
+        "deepseek-chat":     { "name": "DeepSeek Chat V3" },
+        "deepseek-reasoner": { "name": "DeepSeek R1 (Reasoner)" }
+      }
+    },
+
+    // TOGETHER.AI — open Llama models (sk- prefix)
+    // Signup: api.together.ai
+    "together": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Together.AI",
+      "options": {
+        "baseURL": "https://api.together.xyz/v1",
+        "apiKey": "${TOGETHER_API_KEY_1}"
+      },
+      "models": {
+        "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo": { "name": "Llama 3.1 70B (Together)" }
+      }
+    },
+
+    // ── NEW IN MAST ─────────────────────────────────────────────
+
+    // NVIDIA NIM — 40 RPM FREE, no billing (nvapi- prefix)
+    // Signup: build.nvidia.com — 2 min, no credit card!
+    // Best models: deepseek-r1-0528, glm/nemotron, sarvam-m (Hinglish!)
+    "nvidia": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "NVIDIA NIM",
+      "options": {
+        "baseURL": "https://integrate.api.nvidia.com/v1",
+        "apiKey": "${NVIDIA_API_KEY_1}"
+      },
+      "models": {
+        "nvidia/deepseek-r1-0528":                  { "name": "DeepSeek R1-0528 (NVIDIA NIM)" },
+        "nvidia/deepseek-r1-0528-qwen3-8b":         { "name": "DeepSeek Flash 8B (NVIDIA NIM)" },
+        "nvidia/llama-3.3-nemotron-super-49b-v1":   { "name": "Nemotron-49B (NVIDIA NIM)" },
+        "nvidia/llama-3.2-nemo-instruct":            { "name": "Nemo Instruct (NVIDIA NIM)" },
+        "nvidia/mistral-nemo-12b-instruct":          { "name": "Mistral-Nemo 12B (NVIDIA — Hinglish!)" }
+      }
+    },
+
+    // MISTRAL — 1B tokens/month FREE (msk- prefix)
+    // Signup: console.mistral.ai
+    // Best for: bulk writing, docs, write chain primary
+    "mistral": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Mistral AI",
+      "options": {
+        "baseURL": "https://api.mistral.ai/v1",
+        "apiKey": "${MISTRAL_API_KEY_1}"
+      },
+      "models": {
+        "mistral-large-latest": { "name": "Mistral Large (1B tok/mo free)" },
+        "mistral-small-latest": { "name": "Mistral Small (fast + cheap)" },
+        "codestral-latest":     { "name": "Codestral (code specialist)" }
+      }
+    },
+
+    // XAI / GROK (xai- prefix)
+    // Signup: console.x.ai
+    "grokai": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "xAI / Grok",
+      "options": {
+        "baseURL": "https://api.x.ai/v1",
+        "apiKey": "${GROKAI_API_KEY_1}"
+      },
+      "models": {
+        "grok-3-mini": { "name": "Grok 3 Mini (xAI)" },
+        "grok-3":      { "name": "Grok 3 (xAI)" }
+      }
+    },
+
+    // ANTHROPIC — orchestrator + dev agent (sk-ant- prefix, paid)
+    // Signup: console.anthropic.com
+    "anthropic": {
+      "apiKey": "${ANTHROPIC_API_KEY}"
+    },
+
+    // OPENCODE ZEN — built-in free models (no key needed)
+    "opencode": {
+      "models": {
+        "kimi-k2":               { "name": "Kimi K2 (OpenCode Zen)" },
+        "nemotron-3-super-free": { "name": "Nemotron 3 Super (OpenCode Zen)" },
+        "minimax-m2.5-free":     { "name": "MiniMax M2.5 (OpenCode Zen)" },
+        "mimo-v2-omni-free":     { "name": "MiMo V2 Omni (OpenCode Zen)" },
+        "mimo-v2-pro-free":      { "name": "MiMo V2 Pro (OpenCode Zen)" },
+        "big-pickle":            { "name": "Big Pickle (OpenCode default)" }
+      }
+    }
+  },
+
+  // ── MCP Servers ────────────────────────────────────────────────
+  "mcp": {
+
+    // ── MAST Core MCPs (M4STCLAW v3 exclusive) ─────────────────
+
+    "coding": {
+      "command": "python",
+      "args": ["${MAST_DIR}/mcp_servers/coding.py"],
+      "enabled": true,
+      "env": {
+        "MAST_CONFIG": "${MAST_DIR}",
+        "M4ST_BRIDGE_DIR": "${MAST_DIR}/bridge_core"
+      }
+    },
+
+    "task-router": {
+      "command": "python",
+      "args": ["${MAST_DIR}/mcp_servers/task_router_mcp.py"],
+      "enabled": true,
+      "env": {
+        "MAST_CONFIG": "${MAST_DIR}",
+        "M4ST_BRIDGE_DIR": "${MAST_DIR}/bridge_core"
+      }
+    },
+
+    "pentest": {
+      "command": "python",
+      "args": ["${MAST_DIR}/mcp_servers/pentest_mcp.py"],
+      "enabled": true,
+      "env": {
+        "MAST_CONFIG": "${MAST_DIR}",
+        "M4ST_BRIDGE_DIR": "${MAST_DIR}/bridge_core",
+        "SHODAN_API_KEY": "${SHODAN_API_KEY}"
+      }
+    },
+
+    "m4st-agents": {
+      "command": "python",
+      "args": ["${MAST_DIR}/mcp_servers/m4st_agent_mcp.py"],
+      "enabled": true,
+      "env": {
+        "MAST_CONFIG": "${MAST_DIR}",
+        "M4ST_BRIDGE_DIR": "${MAST_DIR}/bridge_core"
+      }
+    },
+
+    "scheduler": {
+      "command": "python",
+      "args": ["${MAST_DIR}/mcp_servers/scheduler.py"],
+      "enabled": true,
+      "env": {
+        "MAST_CONFIG": "${MAST_DIR}",
+        "M4ST_BRIDGE_DIR": "${MAST_DIR}/bridge_core"
+      }
+    },
+
+    // ── OpenWork v12 Core MCPs (bug-patched) ───────────────────
+
+    "memory": {
+      "command": "python",
+      "args": ["${MAST_DIR}/mcp_servers/memory_mcp.py"],
+      "enabled": true,
+      "env": { "MAST_CONFIG": "${MAST_DIR}" }
+    },
+
+    "research": {
+      "command": "python",
+      "args": ["${MAST_DIR}/mcp_servers/research_mcp.py"],
+      "enabled": true,
+      "env": { "MAST_CONFIG": "${MAST_DIR}" }
+    },
+
+    "skills": {
+      "command": "python",
+      "args": ["${MAST_DIR}/mcp_servers/skills_mcp.py"],
+      "enabled": true,
+      "env": { "MAST_CONFIG": "${MAST_DIR}" }
+    },
+
+    "react": {
+      "command": "python",
+      "args": ["${MAST_DIR}/mcp_servers/react_mcp.py"],
+      "enabled": true,
+      "env": { "MAST_CONFIG": "${MAST_DIR}" }
+    },
+
+    "file": {
+      "command": "python",
+      "args": ["${MAST_DIR}/mcp_servers/file_mcp.py"],
+      "enabled": true,
+      "env": { "MAST_CONFIG": "${MAST_DIR}" }
+    },
+
+    "notify": {
+      "command": "python",
+      "args": ["${MAST_DIR}/mcp_servers/notify_mcp.py"],
+      "enabled": true,
+      "env": {
+        "TELEGRAM_BOT_TOKEN": "${TELEGRAM_BOT_TOKEN}",
+        "TELEGRAM_CHAT_ID": "${TELEGRAM_CHAT_ID}",
+        "NTFY_TOPIC": "${NTFY_TOPIC}",
+        "MAST_ALLOWED_CHAT_IDS": "${MAST_ALLOWED_CHAT_IDS}"
+      }
+    },
+
+    "shell": {
+      "command": "python",
+      "args": ["${MAST_DIR}/mcp_servers/shell_mcp.py"],
+      "enabled": true,
+      "env": { "MAST_CONFIG": "${MAST_DIR}" }
+    },
+
+    "browser-use": {
+      "command": "python",
+      "args": ["${MAST_DIR}/mcp_servers/browser_mcp.py"],
+      "enabled": true,
+      "env": { "MAST_CONFIG": "${MAST_DIR}" }
+    },
+
+    "scrapling": {
+      "command": "python",
+      "args": ["${MAST_DIR}/mcp_servers/scrapling_mcp.py"],
+      "enabled": true,
+      "env": { "MAST_CONFIG": "${MAST_DIR}" }
+    },
+
+    "vision-qwen": {
+      "command": "python",
+      "args": ["${MAST_DIR}/mcp_servers/vision_mcp.py"],
+      "enabled": true,
+      "env": {
+        "LLAMA_URL": "http://localhost:8080",
+        "VISION_MODEL": "qwen2.5-vl:7b",
+        "GEMINI_API_KEY": "${GEMINI_API_KEY_1}"
+      }
+    },
+
+    "mcp-doctor": {
+      "command": "python",
+      "args": ["${MAST_DIR}/mcp_servers/mcp_doctor.py"],
+      "enabled": true,
+      "env": { "MAST_CONFIG": "${MAST_DIR}" }
+    },
+
+    "setup": {
+      "command": "python",
+      "args": ["${MAST_DIR}/mcp_servers/setup_mcp.py"],
+      "enabled": true,
+      "env": { "MAST_CONFIG": "${MAST_DIR}" }
+    },
+
+    // ── Browser automation ──────────────────────────────────────
+
+    "playwright": {
+      "type": "local",
+      "command": ["npx", "@playwright/mcp@latest"],
+      "enabled": true
+    },
+
+    "chrome-devtools": {
+      "type": "local",
+      "command": ["npx", "-y", "chrome-devtools-mcp@latest"],
+      "enabled": true
+    },
+
+    // ── Remote MCPs (zero install) ──────────────────────────────
+
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": true
+    },
+
+    // ── Optional / Disabled by default ──────────────────────────
+
+    "composio": {
+      "command": "python",
+      "args": ["${MAST_DIR}/mcp_servers/composio_mcp.py"],
+      "enabled": false,
+      "env": { "COMPOSIO_API_KEY": "${COMPOSIO_API_KEY}" }
+    },
+
+    "firecrawl": {
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "enabled": false,
+      "env": { "FIRECRAWL_API_KEY": "${FIRECRAWL_API_KEY}" }
+    }
+  },
+
+  // ── Skills paths ────────────────────────────────────────────────
+  "skills": {
+    "paths": [
+      ".opencode/skills",
+      "${MAST_DIR}/skills",
+      "C:/workk/OpenWork/.openwork/skills"
+    ]
+  },
+
+  // ── SOUL (hot-reload agent identity) ──────────────────────────
+  "instructions": [
+    "${MAST_DIR}/SOUL_MAST.md"
+  ],
+
+  // ── Permissions ─────────────────────────────────────────────────
+  "permission": {
+    "skill": {
+      "planning-with-files": "allow",
+      "vision":              "allow",
+      "openwork-soul":       "allow",
+      "gui":                 "allow",
+      "vision-gui":          "allow",
+      "multi-agent-omo":     "allow",
+      "superpowers":         "allow",
+      "safety-net":          "allow",
+      "playwright-mcp":      "allow",
+      "telegram":            "allow",
+      "m4st-hinglish-brain": "allow",
+      "m4st-pentest-cai":    "allow"
+    }
+  }
+}
