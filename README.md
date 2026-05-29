@@ -1,5 +1,14 @@
-# MAST v1.0
-**Unified AI Stack — M4STCLAW v3 + OpenWork v12 + EIGENT v4.1**
+# 🚀 MAST v1.0 — Mast Autonomous System Terminal
+
+[![MCP](https://img.shields.io/badge/MCP-21%20servers-00E5FF)](/#)
+[![Skills](https://img.shields.io/badge/skills-28-blueviolet)](/#)
+[![Providers](https://img.shields.io/badge/providers-11-orange)](/#)
+[![Windows](https://img.shields.io/badge/platform-Windows-3776AB)](/#)
+[![License](https://img.shields.io/badge/license-MIT-brightgreen)](LICENSE)
+[![Presentation](https://img.shields.io/badge/view-Presentation-blue)](PRESENTATION.md)
+[![Social Kit](https://img.shields.io/badge/social-kit-ff69b4)](SOCIAL.md)
+
+**Unified AI operator — M4STCLAW v3 + OpenWork v12 + EIGENT v4.1**
 
 > *Working > Perfect · Shipped > Planned · 80% in 3hrs > 100% in 3 days*
 
@@ -12,6 +21,16 @@ MAST is Mast's (Anuj's) unified personal AI operator — a Jarvis-style system b
 - **M4STCLAW v3** — pentest MCPs, bridge_core (recon/vuln/scheduler/agents), SOUL identity
 - **OpenWork v12** — 15 hardened MCP servers, semantic cache, 56 API key rotation
 - **EIGENT v4.1** — lean 6-agent config, NVIDIA NIM integration, working-first philosophy
+
+At a glance:
+
+| Layer | Count | Role |
+|-------|------:|------|
+| MCP servers | 21 | Tools for shell, files, memory, browser, research, vision, pentest, scheduling, agents |
+| Skills | 28 | Hot-reloadable workflows for research, GUI, safety, memory, pentest, plugins, media |
+| Providers | 11 | Free-first cloud routing with SMART_KEY prefix detection |
+| Agents | 6 | Developer, browser, document, multimodal, pentest, orchestrator |
+| Bridge modules | 14 | M4STCLAW core logic: memory, recon, vuln, scheduler, safety, voice, agents |
 
 ### What's New in MAST over predecessors
 
@@ -97,6 +116,38 @@ MAST/
 
 ---
 
+## Algorithm
+
+MAST runs a skill-first, safety-gated, task-aware routing loop:
+
+```text
+User request
+  ↓
+SOUL_MAST identity + project context
+  ↓
+Safety guard
+  ├─ blocked if destructive / unauthorized
+  └─ allowed if safe
+  ↓
+Skill search
+  ├─ replay known workflow if matched
+  └─ route to MCP if no skill hit
+  ↓
+Task classifier
+  ├─ code / research / vision / pentest / hinglish / agent / write / speed
+  ↓
+Provider chain
+  ├─ try best model
+  ├─ rotate key on rate limit
+  └─ fallback across free-first providers
+  ↓
+Memory log + response
+```
+
+For a deeper walkthrough, see [ALGORITHM.md](ALGORITHM.md).
+
+---
+
 ## Task Chains
 
 | Chain | Primary Model | Use Case |
@@ -112,6 +163,19 @@ MAST/
 | `hinglish` | **NVIDIA/Sarvam-M** → Gemini | Indic/Hinglish tasks |
 | `vision_reason` | Gemini 2.5 Flash → MiMo-Omni | Visual reasoning |
 | `default` | Groq → Cerebras → NVIDIA → Gemini | Fallback |
+
+---
+
+## Project Resources
+
+| Resource | Description |
+|----------|-------------|
+| [ALGORITHM.md](ALGORITHM.md) | Routing algorithm, fallback loop, memory flow, and safety gate |
+| [PRESENTATION.md](PRESENTATION.md) | Launch deck-style walkthrough |
+| [SOCIAL.md](SOCIAL.md) | Tweets, LinkedIn copy, captions, hashtags |
+| [DEMO_STORYBOARD.md](DEMO_STORYBOARD.md) | GIF/video storyboard for demos |
+| [SOUL_MAST.md](SOUL_MAST.md) | Hot-reloadable identity and operating policy |
+| [CHANGELOG.md](CHANGELOG.md) | Fixes and release notes |
 
 ---
 

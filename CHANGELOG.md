@@ -1,5 +1,17 @@
 # CHANGELOG / FIXES
 
+## [v1.0.2] - 2026-05-29
+
+### Added
+- Public launch assets: `PRESENTATION.md`, `SOCIAL.md`, `DEMO_STORYBOARD.md`, and `ALGORITHM.md`.
+- README badges, at-a-glance stats, algorithm summary, and project resources table.
+- MIT `LICENSE` file to match README badge.
+- GitHub Actions CI workflow for Python syntax compilation.
+
+### Verified
+- Python syntax compile across `mcp_servers/` and `bridge_core/`.
+- Markdown code fences balanced for root docs.
+
 ## [v1.0.1] - 2026-05-10
 
 ### 🔴 Fixed
