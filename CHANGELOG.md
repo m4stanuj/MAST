@@ -4,6 +4,7 @@
 
 ### Added
 - Public launch assets: `PRESENTATION.md`, `SOCIAL.md`, `DEMO_STORYBOARD.md`, and `ALGORITHM.md`.
+- `ECOSYSTEM.md` mapping all M4ST repositories and their roles.
 - README badges, at-a-glance stats, algorithm summary, and project resources table.
 - MIT `LICENSE` file to match README badge.
 - GitHub Actions CI workflow for Python syntax compilation.

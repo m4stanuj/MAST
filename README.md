@@ -7,6 +7,7 @@
 [![License](https://img.shields.io/badge/license-MIT-brightgreen)](LICENSE)
 [![Presentation](https://img.shields.io/badge/view-Presentation-blue)](PRESENTATION.md)
 [![Social Kit](https://img.shields.io/badge/social-kit-ff69b4)](SOCIAL.md)
+[![Ecosystem](https://img.shields.io/badge/M4ST-Ecosystem-111111)](ECOSYSTEM.md)
 
 **Unified AI operator — M4STCLAW v3 + OpenWork v12 + EIGENT v4.1**
 
@@ -170,6 +171,7 @@ For a deeper walkthrough, see [ALGORITHM.md](ALGORITHM.md).
 
 | Resource | Description |
 |----------|-------------|
+| [ECOSYSTEM.md](ECOSYSTEM.md) | Full M4ST repo map and how the projects fit together |
 | [ALGORITHM.md](ALGORITHM.md) | Routing algorithm, fallback loop, memory flow, and safety gate |
 | [PRESENTATION.md](PRESENTATION.md) | Launch deck-style walkthrough |
 | [SOCIAL.md](SOCIAL.md) | Tweets, LinkedIn copy, captions, hashtags |
