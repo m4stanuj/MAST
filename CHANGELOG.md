@@ -10,14 +10,14 @@
 - GitHub Actions CI workflow for Python syntax compilation.
 
 ### Verified
-- Python syntax compile across tool server and local runtime modules.
+- Python syntax compile across `mcp_servers/` and `bridge_core/`.
 - Markdown code fences balanced for root docs.
 
 ## [v1.0.1] - 2026-05-10
 
 ### 🔴 Fixed
-- **Runtime identity loading**: Fixed stale identity-file references in coding, task routing, and agent tools.
-- **Runtime module paths**: Fixed local module path resolution for research and security workflow helpers.
+- **SOUL Identity Loading**: Fixed incorrect references to `SOUL_v3.md` in `coding.py`, `task_router_mcp.py`, and `m4st_agent_mcp.py`. Now correctly points to `SOUL_MAST.md` with a fallback to `SOUL.md`. Agent identity now loads successfully across all tools.
+- **Bridge Core Paths**: Fixed an issue in `recon.py` and `vuln.py` where they searched for the non-existent `bridge/` directory instead of the actual `bridge_core/` directory. Direct brain calls for pentest tasks now execute without silently failing.
 - **Environment Variable Paths**: Fixed `.env` loading in multiple core files (`brain.py`, `smart_brain.py`, `voice.py`, `recon.py`, `vuln.py`, `research.py`). Changed paths from `ROOT/.env` to the correct `config/.env` structure.
 - **Task Routing Schema**: Added `hinglish` to the `task_hint` parameter in `task_router_mcp.py` to match the newly added fallback chains.
 - **Setup Script Syntax**: Fixed a `SyntaxError` in `setup_mcp.py` caused by invalid nested quotes inside an f-string, ensuring compatibility with Python 3.10 and 3.11.

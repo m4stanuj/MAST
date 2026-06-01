@@ -63,7 +63,7 @@ Selected chain
   -> final fallback pool
 ```
 
-The routing policy is free-first: use local models and approved free/provider fallbacks where appropriate, then log the chosen route and reason.
+The routing policy is free-first: Groq, Cerebras, OpenRouter, NVIDIA NIM, Gemini, Mistral, SambaNova, DeepSeek, Together, xAI/Grok, HuggingFace, and local model fallback where appropriate.
 
 ## 6. Agent Orchestration
 
