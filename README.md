@@ -178,6 +178,9 @@ For a deeper walkthrough, see [ALGORITHM.md](ALGORITHM.md).
 | [DEMO_STORYBOARD.md](DEMO_STORYBOARD.md) | GIF/video storyboard for demos |
 | [SOUL_MAST.md](SOUL_MAST.md) | Hot-reloadable identity and operating policy |
 | [CHANGELOG.md](CHANGELOG.md) | Fixes and release notes |
+| [SECURITY.md](SECURITY.md) | Security policy, vulnerability reporting, and authorized-use boundaries |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution guide for docs, tests, safety fixes, and reproducible setup |
+| [docs/SAFETY.md](docs/SAFETY.md) | Safety model for local-first operation, scope checks, and risky actions |
 
 ---
 
