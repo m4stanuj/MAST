@@ -22,7 +22,7 @@ personality:  INTJ-A · 5w4 Iconoclast · 8-Wing power awareness
 
 ## STACK SNAPSHOT
 
-machine:      Windows 11, RTX 2060 Super (8GB VRAM)
+machine:      Windows 11, Low-VRAM GPU (4-8GB) — local inference optimised
 local_model:  qwen3.5:9b-instruct-q4_K_M — PRIVACY / OFFLINE ONLY
 local_rule:   Internet available = use cloud. Local = sensitive data or no internet. Period.
 memory:       T1 RAM (~500 tok) + T2 SQLite (7d) + T3 ChromaDB + T4 Graphiti (V2)

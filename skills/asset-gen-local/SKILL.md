@@ -146,7 +146,7 @@ generate_3d_model(
 
 ## Requirements
 
-- **GPU:** NVIDIA 8GB+ VRAM (RTX 2060 Super works ✅)
+- **GPU:** NVIDIA 4-8GB VRAM (low-VRAM optimised ✅)
 - **Python:** 3.10+
 - **HF Token:** Required for model downloads
 - **License:** Accept Stable Audio Open terms
