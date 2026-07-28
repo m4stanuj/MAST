@@ -1,4 +1,4 @@
-name: CI
+name: CI — Lint, Validate & Build
 
 on:
   push:
@@ -7,13 +7,52 @@ on:
     branches: [main]
 
 jobs:
-  syntax:
+  validate:
+    name: Validate & Lint
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Compile Python files
+          cache: "pip"
+
+      - name: Install dependencies
         run: |
-          python -m compileall mcp_servers bridge_core
+          python -m pip install --upgrade pip
+          pip install ruff
+          if [ -f requirements.txt ]; then pip install -r requirements.txt --dry-run; fi
+
+      - name: Compile Python syntax check
+        run: |
+          python -m compileall mcp_servers bridge_core -q
+
+      - name: Lint with Ruff
+        run: |
+          ruff check . --output-format=github --ignore=E501 || true
+
+      - name: Validate JSON configs
+        run: |
+          python -c "
+          import json, sys, pathlib
+          failed = []
+          for f in pathlib.Path('.').rglob('*.json'):
+            if '.git' in str(f): continue
+            try: json.load(open(f))
+            except Exception as e: failed.append(f'{f}: {e}')
+          if failed:
+            print('FAILED JSON files:'); [print(f) for f in failed]; sys.exit(1)
+          print(f'All JSON files valid ({len(list(pathlib.Path(\".\").rglob(\"*.json\")))} checked)')
+          "
+
+      - name: Check .env.example has no real secrets
+        run: |
+          if grep -E '(sk-|gsk_|AIza|token=.{20,})' .env.example; then
+            echo "WARNING: Possible real secret found in .env.example"
+            exit 1
+          fi
+          echo "No secrets detected in .env.example"
