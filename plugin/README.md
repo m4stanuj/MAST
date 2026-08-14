@@ -22,7 +22,7 @@ Why this exists:
    https://github.com/m4stanuj/MAST/tree/main/plugin
    ```
 3. Preview → Install. The `m4st-mesh` remote MCP server registers and connects
-   to `http://localhost:8000/mcp`.
+   to `http://localhost:8000/mcp/sse`.
 
 ## Note for other clients
 
