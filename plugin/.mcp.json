@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "m4st-mesh": {
+      "type": "remote",
+      "url": "http://localhost:8000/mcp"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "m4st-mesh",
+  "displayName": "M4ST Mesh",
+  "version": "1.0.0",
+  "description": "M4ST unified MCP mesh server: memory, shell, file, research, browser, skills, task routing and more — exposed as a single remote MCP endpoint (http://localhost:8000/mcp). Start it with `python start.py` in the M4STCLAW repo before connecting.",
+  "author": "M4ST",
+  "license": "MIT",
+  "repository": "https://github.com/m4stanuj/MAST"
+}

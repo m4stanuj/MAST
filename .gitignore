@@ -24,6 +24,9 @@ data/
 !skills/telegram/telegram-chats.example.json
 !.claude-plugin/
 !.claude-plugin/**
+!plugin/.claude-plugin/
+!plugin/.claude-plugin/**
+!plugin/.mcp.json
 
 # ─── Virtual envs ─────────────────────────────────────────────
 venv/
