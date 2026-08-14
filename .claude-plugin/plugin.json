@@ -1,0 +1,10 @@
+{
+  "name": "m4st-mast",
+  "version": "1.0.0",
+  "description": "MAST — Unified AI stack: 17 MCP servers for memory, shell, file, research, browser, vision, coding, pentest, task routing, and more.",
+  "author": "M4ST",
+  "license": "MIT",
+  "repository": "https://github.com/m4stanuj/MAST",
+  "commands": {},
+  "agents": {}
+}

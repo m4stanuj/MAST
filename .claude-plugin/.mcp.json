@@ -1,0 +1,39 @@
+{
+  "mcpServers": {
+    "m4st-memory": {
+      "command": "python",
+      "args": ["./mcp_servers/memory_mcp.py"],
+      "env": { "MAST_CONFIG": "./mcp_servers" }
+    },
+    "m4st-shell": {
+      "command": "python",
+      "args": ["./mcp_servers/shell_mcp.py"],
+      "env": { "MAST_CONFIG": "./mcp_servers" }
+    },
+    "m4st-file": {
+      "command": "python",
+      "args": ["./mcp_servers/file_mcp.py"],
+      "env": { "MAST_CONFIG": "./mcp_servers" }
+    },
+    "m4st-research": {
+      "command": "python",
+      "args": ["./mcp_servers/research_mcp.py"],
+      "env": { "MAST_CONFIG": "./mcp_servers" }
+    },
+    "m4st-browser": {
+      "command": "python",
+      "args": ["./mcp_servers/browser_mcp.py"],
+      "env": { "MAST_CONFIG": "./mcp_servers" }
+    },
+    "m4st-skills": {
+      "command": "python",
+      "args": ["./mcp_servers/skills_mcp.py"],
+      "env": { "MAST_CONFIG": "./mcp_servers" }
+    },
+    "m4st-task-router": {
+      "command": "python",
+      "args": ["./mcp_servers/task_router_mcp.py"],
+      "env": { "MAST_CONFIG": "./mcp_servers" }
+    }
+  }
+}
